@@ -383,7 +383,7 @@ footer .org a:hover{color:var(--sun)}
       <figure class="pic pic-sm"><img src="img-drop.jpg" alt="把點子投進大樹信箱" onerror="this.parentNode.remove()"></figure>
     </div>
 
-    <form class="idea" id="ideaForm" novalidate data-works-form="idea-center">
+    <form class="idea" id="ideaForm" novalidate>
       <div class="field">
         <label for="idea">你的點子 <span class="hint">（一句話也可以）</span></label>
         <textarea id="idea" name="idea" required maxlength="500" placeholder="例如：如果市集攤位都能放一張路跑報名 QR Code……" aria-describedby="ideaCount ideaErr"></textarea>
@@ -427,7 +427,7 @@ footer .org a:hover{color:var(--sun)}
         <div class="who hidden" id="who">
           <div class="row2">
             <input name="name" type="text" id="name" placeholder="怎麼稱呼你" aria-label="怎麼稱呼你" autocomplete="name">
-            <input name="extra1" type="text" id="org" placeholder="單位或 NPO（選填）" aria-label="單位或 NPO（選填）" autocomplete="organization">
+            <input name="org" type="text" id="org" placeholder="單位或 NPO（選填）" aria-label="單位或 NPO（選填）" autocomplete="organization">
           </div>
           <input name="email" type="email" id="email" placeholder="聯絡信箱（想收到回音再填）" aria-label="聯絡信箱" autocomplete="email" style="margin-top:14px">
         </div>
@@ -600,9 +600,10 @@ footer .org a:hover{color:var(--sun)}
     {text:'台南到高雄只要一小時，揪台南跑友一起包車去跑公益路跑。',cat:'run',ripe:'種子',path:'?',who:'範例點子',sample:true},
     {text:'讓 NPO 把第一線最缺的物資列成清單，大家看了就知道能幫什麼。',cat:'npo',ripe:'長葉',path:'C',who:'範例點子',sample:true}
   ];
-  const KEY='idea-center-v1';
-  let mine=[]; try{mine=JSON.parse(localStorage.getItem(KEY))||[]}catch(e){}
-  const all=()=>SEED.concat(mine);
+  // 點子存在伺服器（/api/curated/idea-center/ideas），所有人看到同一棵樹；自己種的記在這台瀏覽器，果實畫大一點
+  const API='/api/curated/idea-center/ideas', MINE='idea-center-mine-ids';
+  let ideas=[], mineIds=[]; try{mineIds=JSON.parse(localStorage.getItem(MINE))||[]}catch(e){}
+  const all=()=>SEED.concat(ideas);
 
   const g=document.getElementById('fruits'), NS='http://www.w3.org/2000/svg';
   const box=document.getElementById('treeBox'), bubble=document.getElementById('bubble');
@@ -637,6 +638,7 @@ footer .org a:hover{color:var(--sun)}
   document.addEventListener('keydown',e=>{if(e.key==='Escape')bubble.classList.remove('show')});
   document.addEventListener('click',e=>{if(!bubble.contains(e.target)&&!e.target.closest('.fruit'))bubble.classList.remove('show')});
   render();
+  fetch(API,{cache:'no-store'}).then(r=>r.json()).then(j=>{if(j.ok){ideas=j.ideas.map(d=>Object.assign(d,{mine:mineIds.includes(d.id)}));render()}}).catch(()=>{});
 
   // dice
   const STARTS=['「如果路跑終點，也能變成……」','「我常看到附近有人需要……」','「家裡那些用不到的……其實可以……」','「如果市集裡有一個攤位是……」','「要是 NPO 和跑者可以一起……」','「我覺得長輩／孩子會很需要……」','「如果每跑一公里，就能……」','「我們社區最缺的其實是……」','「有一個很瘋狂但可能可行的想法：……」','「如果 AI 能幫忙媒合……」'];
@@ -669,19 +671,26 @@ footer .org a:hover{color:var(--sun)}
     if(!text){document.getElementById('ideaErr').textContent='先寫下一句話就好，不用完美。';ta.focus();return}
     const v=n=>document.querySelector('input[name='+n+']:checked').value;
     const name=document.getElementById('name').value.trim(), org=document.getElementById('org').value.trim();
-    const d={text,cat:v('cat'),ripe:v('ripe'),path:v('path'),who:anon.checked?'匿名的好心人':([name,org].filter(Boolean).join('・')||'一位好心人'),mine:true,t:Date.now()};
-    mine.push(d); try{localStorage.setItem(KEY,JSON.stringify(mine))}catch(err){}
+    const btn=e.target.querySelector('[type=submit]'); btn.disabled=true;
+    const body={text,cat:v('cat'),ripe:v('ripe'),path:v('path'),anon:anon.checked,name,org,email:document.getElementById('email').value.trim()};
+    fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)})
+      .then(r=>r.json().catch(()=>({ok:false}))).then(j=>{btn.disabled=false;
+        if(!j.ok||!j.idea){document.getElementById('ideaErr').textContent=j.error||'送出失敗，請再按一次。';return}
+        grow(Object.assign(j.idea,{mine:true}),e.target)})
+      .catch(()=>{btn.disabled=false;document.getElementById('ideaErr').textContent='網路不穩，點子還在，請再按一次。'});
+  });
+  function grow(d,form){
+    ideas.push(d); mineIds.push(d.id); try{localStorage.setItem(MINE,JSON.stringify(mineIds))}catch(err){}
     confetti();
     say('種下去了！你的點子正在大樹上長大。');
-    e.target.reset(); cnt.textContent='0 / 500'; who.classList.add('hidden');
+    form.reset(); cnt.textContent='0 / 500'; who.classList.add('hidden');
     setTimeout(()=>{
       document.getElementById('top').scrollIntoView({behavior:'smooth'});
       setTimeout(()=>{const i=all().length-1;const el=fruitEl(d,i,true);g.appendChild(el);document.getElementById('count').textContent=all().length;
         setTimeout(()=>{const [x,y]=SLOTS[i%SLOTS.length];show(d,x,y,CAT[d.cat])},900)},700);
     },900);
-  });
+  }
 })();
 </script>
-<script src="/static/works-form.js" defer></script>
 </body>
 </html>
