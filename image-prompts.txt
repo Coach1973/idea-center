@@ -1,0 +1,28 @@
+Please generate 8 SEPARATE images for a charity website called "AI Good Idea Collection Center". Output each one as its own image file (one image per item, do not combine them into a grid or collage), in the order below, at the aspect ratio given.
+
+SHARED STYLE FOR ALL 8 IMAGES (keep them looking like one matching set):
+Warm hand-drawn picture-book illustration, flat colors, thick black ink outlines with slightly wobbly lines, cream background (#FFF8EC), palette of warm orange (#E0662B), leaf green (#3F8A63), sun yellow (#FFC93C), with touches of soft sky blue and rose pink. Playful, cozy, friendly. Characters are diverse Taiwanese people. Absolutely NO text, letters, numbers or logos anywhere in any image.
+
+1. img-safe — wide 16:9
+A huge friendly round-canopy tree on a sunny day; under it a grandmother, a teenager, a runner in sportswear, an office worker and a child sit relaxed on the grass, laughing, writing ideas on paper notes and tying them to low branches like fruit. Feeling: safe, welcoming, no judgment.
+
+2. img-drop — 4:3
+Close-up of a hand dropping a glowing folded paper note shaped like a seed into a cute wooden mailbox built into the trunk of a big tree; small sparkles and tiny leaves pop out as it goes in. Joyful "just drop it in" feeling.
+
+3. img-route-a — 4:3
+A small cheerful project team around a round table under a tree, sticking idea notes on a board and voting with colorful stickers and raised hands; one person holds a phone showing a simple heart icon for online voting. Collaborative and fair.
+
+4. img-route-b — 4:3
+Volunteers in matching mint-green T-shirts setting off together down a neighborhood street, the leader holding a small flag with a simple leaf symbol, others carrying boxes and a megaphone, neighbors waving from shop fronts. Energetic grassroots spirit.
+
+5. img-route-c — 4:3
+A friendly volunteer handing a stack of neatly packed donation boxes with simple heart symbols to smiling staff of a small community nonprofit at their front door, a checklist clipboard nearby. Caring and reliable.
+
+6. img-share — wide 16:9
+A left-to-right story in one scene: a person pulling charging cables, phone chargers, small gadgets and an old laptop out of a drawer; volunteers at a table testing and cleaning them; items placed on a tidy shelf with gold star badges; items handed to happy new owners in a city neighborhood. "Unused things become someone's good luck."
+
+7. img-npo — square 1:1, subject centered for a circular crop
+People from different nonprofit groups — an elderly-care worker, a youth mentor, an environmental volunteer, a person in a wheelchair — standing arm in arm under a tree canopy, smiling and waving, small hearts and leaves floating around. Inclusive: "this place is yours too."
+
+8. img-run — square 1:1, subject centered for a circular crop
+A joyful charity fun-run along a sunny harbor-city waterfront (a Kaohsiung-like port with cranes and a seaside skyline); runners of all ages — kids, seniors, families, a runner pushing a stroller — crossing a finish arch made of leaves and orange balloons. Bright sun-yellow mood.
